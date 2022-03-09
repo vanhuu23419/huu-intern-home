@@ -1,0 +1,18 @@
+  
+
+form {
+
+    input {
+        margin-left: auto;
+
+        &[disabled],
+        &[readonly] {
+            cursor:not-allowed;
+        }
+    }
+
+    label.error {
+        color: var(--red);
+        font-weight: normal!important;
+    }
+}

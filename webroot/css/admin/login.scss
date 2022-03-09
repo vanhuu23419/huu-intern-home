@@ -1,0 +1,29 @@
+#loginForm {
+
+    div.message.error {
+        margin-bottom: 10px;
+        color: orange;
+    }
+
+    form {
+        
+
+        div.input {
+
+            input {
+                margin-left: auto;
+
+                &[disabled],
+                &[readonly] {
+                    cursor:not-allowed;
+                }
+            }
+
+            label.error {
+                color: var(--red);
+                font-weight: normal;
+            }
+
+        }
+    }
+}

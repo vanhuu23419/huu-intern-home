@@ -1,0 +1,13 @@
+form input {
+  margin-left: auto;
+}
+
+form input[disabled], form input[readonly] {
+  cursor: not-allowed;
+}
+
+form label.error {
+  color: var(--red);
+  font-weight: normal !important;
+}
+/*# sourceMappingURL=main.css.map */
