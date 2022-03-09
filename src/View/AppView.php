@@ -39,5 +39,6 @@ class AppView extends View
     {
         $this->loadHelper('Url');
         $this->loadHelper('Breadcrumbs');
+        $this->loadHelper('Paginator', ['templates' => 'paginator-templates']);
     }
 }
