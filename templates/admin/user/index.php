@@ -66,7 +66,7 @@ $this->start('toolbar') ?>
     </div>
     <div class="ms-auto px-3" style="border-left: 1px solid #e5e5e5;">
         <?php
-        $exportCSVUrl = $this->Url::build(
+        $exportCSVUrl = $this->Url->build(
             ['prefix' => 'Admin', 'controller' => 'User', 'action' => 'exportCSV', '?' => $this->request->getQuery()],
             ['fullBase' => true]
         );
@@ -97,8 +97,8 @@ echo $this->Html->script('admin/user/index');
 
 // Execute
 $csrf = $this->request->getAttribute('csrfToken');
-$deleteUrl = $this->Url::build(['prefix' => 'Admin', 'controller' => 'User', 'action' => 'delete', 'id' => 0], ['fullBase' => true]);
-$editUrl = $this->Url::build(['prefix' => 'Admin', 'controller' => 'User', 'action' => 'edit', 'id' => 0], ['fullBase' => true]);
+$deleteUrl = $this->Url->build(['prefix' => 'Admin', 'controller' => 'User', 'action' => 'delete', 'id' => 0], ['fullBase' => true]);
+$editUrl = $this->Url->build(['prefix' => 'Admin', 'controller' => 'User', 'action' => 'edit', 'id' => 0], ['fullBase' => true]);
 ?>
 
 <script>

@@ -24,6 +24,11 @@ class AdminController extends AppController
 
     public function initialize(): void {
         parent::initialize();
+
+        /**
+         * Load Component
+         */
+        $this->loadComponent('Paginator');
         
         /**
          * Set common data for screens

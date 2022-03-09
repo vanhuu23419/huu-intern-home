@@ -160,15 +160,14 @@ class UsersTable extends Table
     }
 
     /**
-     * Search records matches options
+     * Build the search query
      * 
      * @param array $options option to build the query
      * @param int $total the number of records matches options without pagination
      * 
-     * @return array array of App\User\Entity\User
+     * @return Cake\ORM\Query 
      */
-    public function search($_options, &$total = null) {
-
+    public function buildSearchQuery($_options) {
         /**
          * Build query with options
          */
@@ -177,54 +176,29 @@ class UsersTable extends Table
             'name' => '',
             'phone' => '',
             'user_flg' => [],
-            'page' => 1,
-            'perPage' => 10, // record per page
         ];
         foreach($_options as $key => $val) {
             $options[$key] = $val;
         }
 
         // where    
-        $whereConditions = [
-            'del_flg = 0'
-        ];
+        $whereConditions = [];
+        $whereConditions[] = ["del_flg" => 0];
         if ($options['email']) {
-            array_push($whereConditions, "email = '{$options['email']}'");
+            $whereConditions[] = ["email" => $options['email']];
         }
         if ($options['name']) {
-            array_push($whereConditions, "name LIKE '%{$options['name']}%'");
+            $whereConditions[] = ["name LIKE" => "%{$options['name']}%"];
         }
         if ($options['phone']) {
-            array_push($whereConditions, "phone LIKE '%{$options['phone']}%'");
+            $whereConditions[] = ["phone LIKE" => "%{$options['phone']}%"];
         }
         if (count($options['user_flg']) > 0) {
-            $flgs = implode(',', $options['user_flg']);
-            array_push($whereConditions, "user_flg IN ({$flgs})");
+            $whereConditions[] = ["user_flg IN" => $options['user_flg']];
         }
 
-        /**
-         * Execute
-         */
-        // search query
-        $table = new UsersTable();
-
-        $searchQuery = $table->find()->where($whereConditions);
-        if ($options['perPage'] !== false) {
-            $searchQuery->limit(intval($options['perPage']))
-                        ->page(intval($options['page']));
-        }
-        $searchResult = $searchQuery->all();
-
-        // count query
-        if (isset($total)) {
-            $total = $table->find()
-                        ->select(['total' => 'COUNT(id)'])
-                        ->where($whereConditions)
-                        ->first()
-                        ->total;
-        }
-
-        return $searchResult;
+        $searchQuery = $this->find()->where($whereConditions);
+        return $searchQuery;
     }
 
     /**

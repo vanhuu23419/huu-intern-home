@@ -25,7 +25,6 @@ class UserController extends AdminController
             'phone' => '',
             'user_flg' => array_keys($this->fetchTable('Users')->getUserFlags()),
             'page' => 1,
-            'perPage' => 10, // record per page
         ];
         foreach($this->request->getQuery() as $key => $val) {
             $searchOptions[$key] = $val;
@@ -56,8 +55,8 @@ class UserController extends AdminController
         }
 
         // table data
-        $totalRecords = 0; // totals record matches search condition before pagination
-        $tableData = $this->fetchTable('Users')->search($searchOptions, $totalRecords);
+        $query = $this->fetchTable('Users')->buildSearchQuery($searchOptions);
+        $tableData = $this->paginate($query);
         $tableData = $tableData->map(function($user) { 
                                     $user_flg_name = $user->getUserFlagName();
                                     $user = $user->toArray();  // turn each Entity to array
@@ -65,13 +64,15 @@ class UserController extends AdminController
                                     return $user;
                                 })
                                 ->toArray(); 
+        $this->set('tableData', $tableData);
+                        
         if (count($tableData) == 0) {
             $this->set('emptyError', ConfigUtil::getMessage('E005'));
         }
-        
+
         // table head
         $tableHead = [ 
-            'id' => 'ID', 
+            // 'id' => 'ID', 
             'email' => 'Email', 
             'name' => 'Full name',
             'user_flg_name' => 'User flag',
@@ -81,10 +82,6 @@ class UserController extends AdminController
         $this->set('tableHead', $tableHead);
 
         // table option
-        $this->set('tableData', $tableData);
-        $this->set('tableOptions', [
-            'renderId' => false  // whether or not render the Id colunn 
-        ]);
         $this->set('rowId', 'id');  // primary key of a record
         $this->set('columnWidths', [
             'email' => 15, 
@@ -102,14 +99,6 @@ class UserController extends AdminController
 
         // page title
         $this->set('pageTitle', 'Users');
-
-        // pagination
-        $this->set('pagination', [
-            'total' => $totalRecords,
-            'page' => $searchOptions['page'],
-            'perPage' => $searchOptions['perPage'],
-            'paginationOffset' => 4, // maximum paginate button per page
-        ]);
 
         // search toolbar
         $user_flg = $this->fetchTable('Users')->getUserFlags();
